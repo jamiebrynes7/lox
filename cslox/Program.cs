@@ -1,4 +1,5 @@
 ﻿using Lox.Errors;
+using Lox.Tokens;
 
 class Program
 {
@@ -24,7 +25,8 @@ class Program
     {
         var program = File.ReadAllText(filePath);
         var reporter = new ErrorReporter();
-        // run(program, reporter)
+
+        Run(program, reporter);
 
         if (reporter.HasError)
         {
@@ -39,26 +41,23 @@ class Program
             Console.Write("> ");
             var line = Console.ReadLine();
 
-            Console.WriteLine(line);
-
             if (line == null)
             {
                 break;
             }
 
-            // run(line)
+            Run(line, new NoOpErrorReporter());
         }
     }
 
-    private static void Run(string program)
+    private static void Run(string program, IErrorReporter errorReporter)
     {
-        /*
-        var scanner = new Scanner(program);
+        var scanner = new Scanner(program, errorReporter);
 
-        foreach (var token in scanner.scanTokens()) {
+        foreach (var token in scanner.ScanTokens())
+        {
             Console.WriteLine(token);
         }
-        */
     }
 }
 
